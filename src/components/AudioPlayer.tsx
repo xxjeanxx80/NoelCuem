@@ -75,6 +75,7 @@ export default function AudioPlayer() {
       document.removeEventListener("touchstart", handleUserInteraction)
       document.removeEventListener("scroll", handleUserInteraction)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // Xử lý khi audio được load và xử lý lỗi

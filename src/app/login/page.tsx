@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react"
 import { useRouter } from "next/navigation"
+import Image from "next/image"
 import { LOGIN_CONFIG } from "@/config"
 import Snow from "@/components/Snow"
 
@@ -49,11 +50,16 @@ export default function LoginPage() {
       
       {/* Background Image with Overlay */}
       <div className="fixed inset-0 z-0">
-        <img
-          alt="Cozy Christmas lights background with dark bokeh"
-          className="h-full w-full object-cover opacity-40 dark:opacity-30"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6lojCSujjvMhHf4iJ8I7RcuI0t0aDGz4IhP9dF8KV_VEwA0Lw-F-2_0Sm_QZ6nCVk2TScMplx9Bkl6Dv3cRH7JMnBsJjhQ9NO6hD-5M_GKXsYinNHeI43KEJpmqx3zio_-k18E2-An_fhrBnPtvfvmamtU19xGd1Cdh1gQIevDNLHIaafs4UVzScv6Crw_-QBKcdobbQpj-lbOcL8Ween1VWMhJ8YofAQQryacyb6Sjn7x_wYY8MZ2EwT8x4UQssZMtoAzsSycexr"
-        />
+        <div className="relative h-full w-full">
+          <Image
+            alt="Cozy Christmas lights background with dark bokeh"
+            className="object-cover opacity-40 dark:opacity-30"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6lojCSujjvMhHf4iJ8I7RcuI0t0aDGz4IhP9dF8KV_VEwA0Lw-F-2_0Sm_QZ6nCVk2TScMplx9Bkl6Dv3cRH7JMnBsJjhQ9NO6hD-5M_GKXsYinNHeI43KEJpmqx3zio_-k18E2-An_fhrBnPtvfvmamtU19xGd1Cdh1gQIevDNLHIaafs4UVzScv6Crw_-QBKcdobbQpj-lbOcL8Ween1VWMhJ8YofAQQryacyb6Sjn7x_wYY8MZ2EwT8x4UQssZMtoAzsSycexr"
+            fill
+            priority
+            unoptimized
+          />
+        </div>
         <div className="absolute inset-0 bg-gradient-to-b from-background-dark/80 via-background-dark/50 to-background-dark/90"></div>
       </div>
 

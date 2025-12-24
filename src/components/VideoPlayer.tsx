@@ -227,7 +227,6 @@ export default function VideoPlayer({
             right: 0,
             bottom: 0,
             width: "100vw",
-            height: "100vh",
             height: "100dvh", // Dynamic viewport height cho mobile
           }}
           onClick={handleClose}
