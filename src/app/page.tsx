@@ -138,7 +138,16 @@ export default function Page() {
             </div>
             <h2 className="text-white text-base md:text-lg font-bold leading-tight tracking-tight">Gửi Vũ Như Phương ❤️</h2>
           </div>
-          <AudioPlayer />
+          <div className="flex items-center gap-3">
+            <AudioPlayer />
+            <a
+              href="/gallery"
+              className="size-8 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors"
+              title="Gallery"
+            >
+              <span className="material-symbols-outlined text-[20px]">image</span>
+            </a>
+          </div>
         </div>
       </header>
       <main className="flex-grow flex flex-col items-center w-full relative z-10">
