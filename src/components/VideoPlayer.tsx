@@ -20,7 +20,9 @@ export default function VideoPlayer({
 }: VideoPlayerProps) {
   const [isPlaying, setIsPlaying] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const [showInlineVideo, setShowInlineVideo] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const inlineVideoRef = useRef<HTMLVideoElement>(null)
 
   const handlePlay = () => {
     if (!VIDEO_URL) {
@@ -28,7 +30,8 @@ export default function VideoPlayer({
       return
     }
 
-    setShowModal(true)
+    // Hiển thị video inline trong thumbnail container (cả mobile và desktop)
+    setShowInlineVideo(true)
     setIsPlaying(true)
   }
 
@@ -187,32 +190,92 @@ export default function VideoPlayer({
   return (
     <>
       {/* Video thumbnail với play button */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] group cursor-pointer">
-        <div
-          className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-          style={{
-            backgroundImage: thumbnailUrl
-              ? `url('${thumbnailUrl}')`
-              : "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2Ar7T_OlO4Imu8gHaWk3tprBo5V4Mkfm9mjYfF2E_M_g5gQTYy7EsTwg2VBpCODGHI_ftrNwih2i1VPCfcc0xU_M0uiZMzkD-zCMHIEUtcvxdKKmteg3kHkpYtTRM-i46SFTUhMStE5s1Gamd3YZKrucJvQEctlaaejgxzNWTA1HzqyYUFhx2TsGBCl0pr6L2sxoUgl_sUSHt1jFxPEUJ6BI-DjnPaK2AOeNMEySOl8f27u9Z5bAjmS7qM5UPw6vkH1Igygs8F5rj')",
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-        <div className="absolute bottom-0 left-0 p-6 w-full pointer-events-none z-10">
-          <div className="inline-flex items-center gap-1 bg-primary/90 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">
-            <span className="material-symbols-outlined text-[14px]">videocam</span>
-            Kỷ Niệm Của Chúng Mình
-          </div>
-          <h3 className="text-white text-xl font-bold leading-tight">{title}</h3>
-          <p className="text-white/70 text-sm mt-1">{description}</p>
-        </div>
-        <div
-          onClick={handlePlay}
-          className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20 backdrop-blur-[2px] z-20"
-        >
-          <div className="size-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white hover:scale-110 transition-transform">
-            <span className="material-symbols-outlined text-4xl ml-1">play_arrow</span>
-          </div>
-        </div>
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] group cursor-pointer bg-black">
+        {/* Thumbnail hoặc Video inline */}
+        {!showInlineVideo ? (
+          <>
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
+              style={{
+                backgroundImage: thumbnailUrl
+                  ? `url('${thumbnailUrl}')`
+                  : "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2Ar7T_OlO4Imu8gHaWk3tprBo5V4Mkfm9mjYfF2E_M_g5gQTYy7EsTwg2VBpCODGHI_ftrNwih2i1VPCfcc0xU_M0uiZMzkD-zCMHIEUtcvxdKKmteg3kHkpYtTRM-i46SFTUhMStE5s1Gamd3YZKrucJvQEctlaaejgxzNWTA1HzqyYUFhx2TsGBCl0pr6L2sxoUgl_sUSHt1jFxPEUJ6BI-DjnPaK2AOeNMEySOl8f27u9Z5bAjmS7qM5UPw6vkH1Igygs8F5rj')",
+              }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+            <div className="absolute bottom-0 left-0 p-6 w-full pointer-events-none z-10">
+              <div className="inline-flex items-center gap-1 bg-primary/90 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">
+                <span className="material-symbols-outlined text-[14px]">videocam</span>
+                Kỷ Niệm Của Chúng Mình
+              </div>
+              <h3 className="text-white text-xl font-bold leading-tight">{title}</h3>
+              <p className="text-white/70 text-sm mt-1">{description}</p>
+            </div>
+            <div
+              onClick={handlePlay}
+              className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20 backdrop-blur-[2px] z-20 cursor-pointer"
+            >
+              <div className="size-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white hover:scale-110 transition-transform">
+                <span className="material-symbols-outlined text-4xl ml-1">play_arrow</span>
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Video inline trong khung thumbnail */}
+            {VIDEO_URL ? (
+              <video
+                ref={inlineVideoRef}
+                src={VIDEO_URL}
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover rounded-[1.5rem]"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+                onEnded={() => {
+                  setIsPlaying(false)
+                  setShowInlineVideo(false)
+                  window.dispatchEvent(new CustomEvent("video-stopped"))
+                }}
+                onPlay={() => {
+                  window.dispatchEvent(new CustomEvent("video-playing"))
+                }}
+                onPause={() => {
+                  window.dispatchEvent(new CustomEvent("video-stopped"))
+                }}
+              >
+                Trình duyệt của bạn không hỗ trợ video.
+              </video>
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-surface-dark text-white rounded-[1.5rem]">
+                <div className="text-center">
+                  <span className="material-symbols-outlined text-6xl mb-4">error</span>
+                  <p className="text-lg">Video chưa được cấu hình</p>
+                </div>
+              </div>
+            )}
+            {/* Nút đóng video inline */}
+            <button
+              onClick={() => {
+                if (inlineVideoRef.current) {
+                  inlineVideoRef.current.pause()
+                  inlineVideoRef.current.currentTime = 0
+                }
+                setShowInlineVideo(false)
+                setIsPlaying(false)
+                window.dispatchEvent(new CustomEvent("video-stopped"))
+              }}
+              className="absolute top-3 right-3 z-20 size-12 flex items-center justify-center bg-black/70 hover:bg-black/90 rounded-full text-white transition-colors backdrop-blur-sm shadow-2xl border-2 border-white/20"
+              aria-label="Đóng video"
+            >
+              <span className="material-symbols-outlined text-3xl font-bold">close</span>
+            </button>
+          </>
+        )}
       </div>
 
       {/* Modal video player */}
