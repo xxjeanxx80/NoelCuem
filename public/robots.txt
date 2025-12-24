@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://noel-gift.vercel.app/sitemap.xml

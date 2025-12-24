@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0B1026"/>
+      <stop offset="1" stop-color="#0D132B"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <g fill="#F4D35E" opacity="0.7">
+    <circle cx="100" cy="80" r="4"/>
+    <circle cx="1140" cy="120" r="3"/>
+    <circle cx="900" cy="60" r="4"/>
+    <circle cx="500" cy="100" r="3"/>
+  </g>
+  <text x="50%" y="45%" dominant-baseline="middle" text-anchor="middle" font-family="DM Serif Display, serif" font-size="96" fill="#F4D35E">Noel Gift 2025</text>
+  <text x="50%" y="58%" dominant-baseline="middle" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="32" fill="#2A9D8F">Trang quà tặng Noel dành riêng cho em</text>
+  <path d="M600 420c-80-60-180-140-180-240 0-70 60-120 120-120 40 0 70 20 90 40 20-20 50-40 90-40 60 0 120 50 120 120 0 100-100 180-180 240-10 10-40 10-60 0z" fill="#D7263D" opacity="0.9"/>
+</svg>
