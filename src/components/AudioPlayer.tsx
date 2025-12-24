@@ -21,33 +21,45 @@ export default function AudioPlayer() {
     let hasTriedAutoplay = false
 
     // Hàm thử phát nhạc
-    const tryPlay = () => {
+    const tryPlay = async () => {
       if (hasTriedAutoplay && isPlaying) return
       
-      if (AUDIO_CONFIG.autoPlay) {
-        audio.play().catch((error) => {
-          // Autoplay bị chặn - bình thường trên mobile
-          console.log("Autoplay bị chặn, cần user interaction:", error)
-        })
-      } else {
-        // Nếu không autoplay, chỉ load từ localStorage
-        const savedState = localStorage.getItem("audio-playing")
-        if (savedState === "true") {
-          audio.play().catch(() => {
-            // Bỏ qua lỗi autoplay bị chặn
-          })
+      try {
+        if (AUDIO_CONFIG.autoPlay) {
+          // Thử phát nhạc tự động
+          await audio.play()
+          localStorage.setItem("audio-playing", "true")
+          hasTriedAutoplay = true
+        } else {
+          // Nếu không autoplay, chỉ load từ localStorage
+          const savedState = localStorage.getItem("audio-playing")
+          if (savedState === "true") {
+            await audio.play()
+            hasTriedAutoplay = true
+          }
+        }
+      } catch (error) {
+        // Autoplay bị chặn - bình thường trên mobile
+        console.log("Autoplay bị chặn, sẽ thử lại sau user interaction:", error)
+        // Lưu trạng thái muốn phát để thử lại sau
+        if (AUDIO_CONFIG.autoPlay) {
+          localStorage.setItem("audio-should-play", "true")
         }
       }
-      hasTriedAutoplay = true
     }
 
     // Thử phát ngay khi component mount
     const timer = setTimeout(tryPlay, 500)
 
     // Trên mobile, autoplay thường bị chặn, nên thử lại sau user interaction đầu tiên
-    const handleUserInteraction = () => {
-      if (!isPlaying && AUDIO_CONFIG.autoPlay && !hasTriedAutoplay) {
-        tryPlay()
+    const handleUserInteraction = async () => {
+      if (!isPlaying && !hasTriedAutoplay) {
+        // Kiểm tra xem có nên tự động phát không
+        const shouldAutoPlay = AUDIO_CONFIG.autoPlay || localStorage.getItem("audio-should-play") === "true"
+        if (shouldAutoPlay) {
+          await tryPlay()
+          localStorage.removeItem("audio-should-play")
+        }
       }
     }
 
