@@ -33,6 +33,17 @@ export default function VideoPlayer({
   }
 
   const handleClose = () => {
+    // Thoát fullscreen trước nếu đang ở chế độ fullscreen (hỗ trợ các prefix)
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {})
+    } else if ((document as any).webkitFullscreenElement) {
+      ;(document as any).webkitExitFullscreen().catch(() => {})
+    } else if ((document as any).mozFullScreenElement) {
+      ;(document as any).mozCancelFullScreen().catch(() => {})
+    } else if ((document as any).msFullscreenElement) {
+      ;(document as any).msExitFullscreen().catch(() => {})
+    }
+    
     setShowModal(false)
     setIsPlaying(false)
     if (videoRef.current) {
@@ -63,22 +74,69 @@ export default function VideoPlayer({
     }
   }, [showModal])
 
-  // Phát video khi modal mở
+  // Phát video khi modal mở và tự động fullscreen trên mobile
   useEffect(() => {
     if (showModal && videoRef.current) {
-      videoRef.current.play().catch((error) => {
+      const video = videoRef.current
+      const isMobile = window.innerWidth < 768
+      
+      // Phát video
+      video.play().catch((error) => {
         console.error("Lỗi khi phát video:", error)
       })
+      
       // Dispatch event khi video thực sự bắt đầu phát
-      const handleVideoPlay = () => {
+      const handleVideoPlay = async () => {
         window.dispatchEvent(new CustomEvent("video-playing"))
+        
+        // Tự động fullscreen trên mobile sau khi video bắt đầu phát
+        if (isMobile) {
+          // Đợi một chút để video bắt đầu phát trước khi fullscreen
+          setTimeout(() => {
+            // Thử các phương thức fullscreen khác nhau (hỗ trợ nhiều browser)
+            if (video.requestFullscreen) {
+              video.requestFullscreen().catch((err) => {
+                console.log("Fullscreen không khả dụng:", err)
+              })
+            } else if ((video as any).webkitRequestFullscreen) {
+              ;(video as any).webkitRequestFullscreen().catch((err: any) => {
+                console.log("Webkit fullscreen không khả dụng:", err)
+              })
+            } else if ((video as any).mozRequestFullScreen) {
+              ;(video as any).mozRequestFullScreen().catch((err: any) => {
+                console.log("Moz fullscreen không khả dụng:", err)
+              })
+            } else if ((video as any).msRequestFullscreen) {
+              ;(video as any).msRequestFullscreen().catch((err: any) => {
+                console.log("MS fullscreen không khả dụng:", err)
+              })
+            }
+          }, 300)
+        }
       }
-      videoRef.current.addEventListener("play", handleVideoPlay)
+      
+      video.addEventListener("play", handleVideoPlay)
+      
+      // Lắng nghe khi thoát fullscreen (người dùng swipe down trên mobile)
+      const handleFullscreenChange = () => {
+        if (!document.fullscreenElement && showModal) {
+          // Nếu user thoát fullscreen bằng gesture, đóng modal
+          handleClose()
+        }
+      }
+      
+      // Hỗ trợ các prefix khác nhau cho fullscreen API
+      document.addEventListener("fullscreenchange", handleFullscreenChange)
+      document.addEventListener("webkitfullscreenchange", handleFullscreenChange)
+      document.addEventListener("mozfullscreenchange", handleFullscreenChange)
+      document.addEventListener("MSFullscreenChange", handleFullscreenChange)
       
       return () => {
-        if (videoRef.current) {
-          videoRef.current.removeEventListener("play", handleVideoPlay)
-        }
+        video.removeEventListener("play", handleVideoPlay)
+        document.removeEventListener("fullscreenchange", handleFullscreenChange)
+        document.removeEventListener("webkitfullscreenchange", handleFullscreenChange)
+        document.removeEventListener("mozfullscreenchange", handleFullscreenChange)
+        document.removeEventListener("MSFullscreenChange", handleFullscreenChange)
       }
     }
   }, [showModal])
@@ -145,13 +203,13 @@ export default function VideoPlayer({
             className="relative w-full h-full md:h-auto md:max-w-4xl md:mx-4 bg-black md:rounded-2xl overflow-hidden shadow-2xl flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button */}
+            {/* Close button - lớn hơn và dễ bấm trên mobile */}
             <button
               onClick={handleClose}
-              className="absolute top-2 right-2 md:top-4 md:right-4 z-10 size-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-sm"
+              className="absolute top-3 right-3 md:top-4 md:right-4 z-20 size-12 md:size-10 flex items-center justify-center bg-black/60 hover:bg-black/80 md:bg-white/10 md:hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-sm shadow-lg"
               aria-label="Đóng video"
             >
-              <span className="material-symbols-outlined text-2xl md:text-base">close</span>
+              <span className="material-symbols-outlined text-3xl md:text-base">close</span>
             </button>
 
             {/* Video player */}
@@ -163,7 +221,14 @@ export default function VideoPlayer({
                 autoPlay
                 playsInline
                 className="w-full h-full object-contain"
-                onEnded={() => setIsPlaying(false)}
+                onEnded={() => {
+                  setIsPlaying(false)
+                  // Thoát fullscreen khi video kết thúc
+                  if (document.fullscreenElement) {
+                    document.exitFullscreen().catch(() => {})
+                  }
+                  handleClose()
+                }}
               >
                 Trình duyệt của bạn không hỗ trợ video.
               </video>
