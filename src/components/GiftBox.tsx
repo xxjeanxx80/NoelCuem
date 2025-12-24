@@ -5,19 +5,22 @@ import { ANIMATION_CONFIG } from "@/config"
 
 interface GiftBoxProps {
   onOpen?: () => void
+  canOpen?: boolean // Cho phép mở quà hay không (dựa vào thời gian)
 }
 
 /**
  * Component hộp quà với animation mở quà
  * Khi click sẽ có hiệu ứng mở hộp và scroll đến phần reveal
+ * Chỉ cho phép mở khi canOpen = true
  */
-export default function GiftBox({ onOpen }: GiftBoxProps) {
+export default function GiftBox({ onOpen, canOpen = true }: GiftBoxProps) {
   const [isOpening, setIsOpening] = useState(false)
   const [isOpened, setIsOpened] = useState(false)
   const boxRef = useRef<HTMLDivElement>(null)
 
   const handleOpen = useCallback(() => {
-    if (isOpening || isOpened) return
+    // Không cho mở nếu canOpen = false
+    if (!canOpen || isOpening || isOpened) return
 
     setIsOpening(true)
 
@@ -44,7 +47,7 @@ export default function GiftBox({ onOpen }: GiftBoxProps) {
         onOpen?.()
       }, 300)
     }, ANIMATION_CONFIG.giftBoxOpenDuration)
-  }, [isOpening, isOpened, onOpen])
+  }, [isOpening, isOpened, onOpen, canOpen])
 
   // Lắng nghe custom event để trigger từ bên ngoài
   useEffect(() => {
@@ -55,13 +58,23 @@ export default function GiftBox({ onOpen }: GiftBoxProps) {
   }, [handleOpen])
 
   return (
-    <div className="animate-float mb-8 relative group cursor-pointer">
+    <div className={`animate-float mb-8 relative group ${canOpen ? "cursor-pointer" : "cursor-not-allowed"}`}>
       {/* Glow behind box */}
       <div
-        className={`absolute inset-0 bg-primary/40 blur-[60px] rounded-full scale-75 transition-transform duration-700 ${
-          isOpening ? "scale-110" : "group-hover:scale-90"
+        className={`absolute inset-0 ${canOpen ? "bg-primary/40" : "bg-gray-500/20"} blur-[60px] rounded-full scale-75 transition-transform duration-700 ${
+          isOpening ? "scale-110" : canOpen ? "group-hover:scale-90" : ""
         }`}
       ></div>
+
+      {/* Icon khóa khi chưa cho phép mở */}
+      {!canOpen && !isOpened && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
+          <div className="flex flex-col items-center gap-2 animate-pulse">
+            <span className="material-symbols-outlined text-white/90 text-6xl drop-shadow-2xl">lock</span>
+            <p className="text-white/90 text-sm font-bold text-center drop-shadow-lg">Chưa đến giờ</p>
+          </div>
+        </div>
+      )}
 
       {/* Gift Box Image */}
       <div
@@ -69,11 +82,13 @@ export default function GiftBox({ onOpen }: GiftBoxProps) {
         data-gift-box
         onClick={handleOpen}
         className={`relative w-64 h-64 md:w-80 md:h-80 bg-contain bg-center bg-no-repeat z-10 drop-shadow-2xl transition-all duration-500 ${
-          isOpening
-            ? "gift-box-opening scale-110 rotate-12 opacity-80"
-            : isOpened
-              ? "gift-box-opened scale-95 opacity-60"
-              : "hover:scale-105"
+          !canOpen
+            ? "opacity-40 grayscale-[50%]"
+            : isOpening
+              ? "gift-box-opening scale-110 rotate-12 opacity-80"
+              : isOpened
+                ? "gift-box-opened scale-95 opacity-60"
+                : "hover:scale-105"
         }`}
         style={{
           backgroundImage:

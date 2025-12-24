@@ -143,7 +143,7 @@ export default function Page() {
       </header>
       <main className="flex-grow flex flex-col items-center w-full relative z-10">
         <section className="w-full max-w-[960px] px-4 py-10 md:py-20 flex flex-col items-center text-center">
-          <GiftBox />
+          <GiftBox canOpen={canOpenGift} />
           <h1 className="text-white text-glow text-4xl md:text-6xl font-black tracking-tighter mb-4">
             Merry Christmas <span className="text-primary">2025</span>
           </h1>
