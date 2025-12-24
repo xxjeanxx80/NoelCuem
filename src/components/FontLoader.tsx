@@ -38,7 +38,7 @@ export default function FontLoader() {
       // Đảm bảo font được load
       const loadFont = async () => {
         try {
-          if (document.fonts && document.fonts.check) {
+          if (document.fonts && typeof document.fonts.load === "function") {
             await document.fonts.load('400 24px "Material Symbols Outlined"')
           }
         } catch (error) {

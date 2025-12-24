@@ -28,8 +28,20 @@ module.exports = {
       },
       keyframes: {
         snow: {
-          "0%": { transform: "translateY(-100vh) translateX(0)" },
-          "100%": { transform: "translateY(100vh) translateX(20px)" }
+          "0%": {
+            transform: "translateY(-100vh) translateX(0) rotate(0deg)",
+            opacity: "0",
+          },
+          "10%": {
+            opacity: "1",
+          },
+          "50%": {
+            transform: "translateY(50vh) translateX(var(--sway, 20px)) rotate(180deg)",
+          },
+          "100%": {
+            transform: "translateY(100vh) translateX(calc(var(--sway, 20px) * 2)) rotate(360deg)",
+            opacity: "0.3",
+          },
         },
         float: {
           "0%": { transform: "translateY(0)" },

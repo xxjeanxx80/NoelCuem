@@ -40,6 +40,16 @@ export const ANIMATION_CONFIG = {
   scrollDuration: 800, // Thời gian scroll mượt (ms)
 }
 
+// URL video kỷ niệm
+// CÁCH 1: Sử dụng file local trong thư mục public
+// - Đặt file video vào thư mục public (ví dụ: public/video.mp4)
+// - Sử dụng đường dẫn: "/video.mp4"
+// CÁCH 2: Sử dụng URL từ CDN/YouTube/Vimeo
+// - Upload video lên YouTube, Vimeo, hoặc CDN
+// - Sử dụng URL embed hoặc direct link
+// Lưu ý: Để trống nếu chưa có video
+export const VIDEO_URL = "/video.mp4" // Thay đổi thành đường dẫn video của bạn (ví dụ: "/video.mp4" hoặc YouTube embed URL)
+
 // Thông tin hiển thị
 export const APP_INFO = {
   title: "Gửi Người Thương Của Anh - Giáng Sinh 2025",

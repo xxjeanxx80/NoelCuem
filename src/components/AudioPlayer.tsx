@@ -85,6 +85,34 @@ export default function AudioPlayer() {
     }
   }, [])
 
+  // Lắng nghe event từ VideoPlayer để tự động tắt nhạc khi video phát
+  useEffect(() => {
+    const handleVideoPlaying = () => {
+      const audio = audioRef.current
+      if (audio && isPlaying) {
+        audio.pause()
+        localStorage.setItem("audio-playing", "false")
+      }
+    }
+
+    const handleVideoStopped = () => {
+      // Tùy chọn: Tự động bật lại nhạc khi video dừng
+      // Có thể bật/tắt trong config nếu cần
+      // const audio = audioRef.current
+      // if (audio && !isPlaying) {
+      //   audio.play().catch(() => {})
+      // }
+    }
+
+    window.addEventListener("video-playing", handleVideoPlaying)
+    window.addEventListener("video-stopped", handleVideoStopped)
+
+    return () => {
+      window.removeEventListener("video-playing", handleVideoPlaying)
+      window.removeEventListener("video-stopped", handleVideoStopped)
+    }
+  }, [isPlaying])
+
   // Toggle play/pause
   const togglePlay = async () => {
     const audio = audioRef.current

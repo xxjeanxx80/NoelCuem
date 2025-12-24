@@ -6,6 +6,8 @@ import { useState, useEffect } from "react"
 import AudioPlayer from "@/components/AudioPlayer"
 import GiftBox from "@/components/GiftBox"
 import DemoCountdown from "@/components/DemoCountdown"
+import VideoPlayer from "@/components/VideoPlayer"
+import Snow from "@/components/Snow"
 
 export default function Page() {
   const [isGiftOpened, setIsGiftOpened] = useState(false)
@@ -24,6 +26,8 @@ export default function Page() {
 
   return (
     <div className="relative z-10 flex flex-col min-h-screen">
+      {/* Hiệu ứng tuyết rơi */}
+      <Snow />
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
         <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] rounded-full bg-primary/20 blur-[120px]"></div>
         <div className="absolute -bottom-[10%] -right-[10%] w-[50%] h-[50%] rounded-full bg-primary/10 blur-[120px]"></div>
@@ -90,29 +94,11 @@ export default function Page() {
           <div className="flex flex-col lg:flex-row gap-6">
             <div className="w-full lg:w-5/12 flex flex-col gap-6">
               <div className="bg-surface-dark p-3 rounded-[2rem] shadow-xl border border-white/5">
-                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.5rem] group">
-                  <div
-                    className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                    style={{
-                      backgroundImage:
-                        "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2Ar7T_OlO4Imu8gHaWk3tprBo5V4Mkfm9mjYfF2E_M_g5gQTYy7EsTwg2VBpCODGHI_ftrNwih2i1VPCfcc0xU_M0uiZMzkD-zCMHIEUtcvxdKKmteg3kHkpYtTRM-i46SFTUhMStE5s1Gamd3YZKrucJvQEctlaaejgxzNWTA1HzqyYUFhx2TsGBCl0pr6L2sxoUgl_sUSHt1jFxPEUJ6BI-DjnPaK2AOeNMEySOl8f27u9Z5bAjmS7qM5UPw6vkH1Igygs8F5rj')"
-                    }}
-                  ></div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 p-6 w-full">
-                    <div className="inline-flex items-center gap-1 bg-primary/90 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">
-                      <span className="material-symbols-outlined text-[14px]">videocam</span>
-                      Kỷ Niệm Của Chúng Mình
-                    </div>
-                    <h3 className="text-white text-xl font-bold leading-tight">Video: Một năm nhìn lại</h3>
-                    <p className="text-white/70 text-sm mt-1">Click để xem lại những khoảnh khắc đẹp nhất.</p>
-                  </div>
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/20 backdrop-blur-[2px] cursor-pointer">
-                    <div className="size-16 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 text-white hover:scale-110 transition-transform">
-                      <span className="material-symbols-outlined text-4xl ml-1">play_arrow</span>
-                    </div>
-                  </div>
-                </div>
+                <VideoPlayer
+                  thumbnailUrl="https://lh3.googleusercontent.com/aida-public/AB6AXuA2Ar7T_OlO4Imu8gHaWk3tprBo5V4Mkfm9mjYfF2E_M_g5gQTYy7EsTwg2VBpCODGHI_ftrNwih2i1VPCfcc0xU_M0uiZMzkD-zCMHIEUtcvxdKKmteg3kHkpYtTRM-i46SFTUhMStE5s1Gamd3YZKrucJvQEctlaaejgxzNWTA1HzqyYUFhx2TsGBCl0pr6L2sxoUgl_sUSHt1jFxPEUJ6BI-DjnPaK2AOeNMEySOl8f27u9Z5bAjmS7qM5UPw6vkH1Igygs8F5rj"
+                  title="Video: Một năm nhìn lại"
+                  description="Click để xem lại những khoảnh khắc đẹp nhất."
+                />
               </div>
               <div className="glass-panel p-5 rounded-[2rem] flex items-center gap-4">
                 <div className="size-12 rounded-full bg-primary/20 flex items-center justify-center text-primary">
@@ -161,7 +147,7 @@ export default function Page() {
                   </div>
                   <div className="mt-10 flex flex-col items-start gap-1">
                     <p className="text-slate-900 font-bold text-lg">Yêu em nhiều,</p>
-                    <p className="text-slate-600">Anh của em.</p>
+                    <p className="text-slate-600">Trần Minh Đức.</p>
                   </div>
                 </div>
               </div>
@@ -170,8 +156,8 @@ export default function Page() {
         </section>
       </main>
       <footer className="w-full py-8 text-center text-white/40 text-sm relative z-10">
-        <p>Designed with ❤️ for You. © Christmas 2025</p>
+        <p>Designed with ❤️ for Vũ Như Phương. © Christmas 2025</p>
       </footer>
-    </div>
+    </div>    
   )
 }
