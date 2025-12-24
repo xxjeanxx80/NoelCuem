@@ -18,32 +18,50 @@ export default function AudioPlayer() {
     const audio = audioRef.current
     if (!audio) return
 
-    // Nếu autoplay được bật, thử phát nhạc
-    if (AUDIO_CONFIG.autoPlay) {
-      // Đợi một chút để đảm bảo audio đã sẵn sàng
-      const timer = setTimeout(() => {
-        audio.play().catch((error) => {
-          // Nếu autoplay bị chặn, lưu trạng thái để user có thể bật sau
-          console.log("Autoplay bị chặn, cần user interaction:", error)
-          // Thử load từ localStorage
-          const savedState = localStorage.getItem("audio-playing")
-          if (savedState === "true") {
-            audio.play().catch(() => {
-              // Bỏ qua nếu vẫn không được
-            })
-          }
-        })
-      }, 500)
+    let hasTriedAutoplay = false
 
-      return () => clearTimeout(timer)
-    } else {
-      // Nếu không autoplay, chỉ load từ localStorage
-      const savedState = localStorage.getItem("audio-playing")
-      if (savedState === "true" && audio) {
-        audio.play().catch(() => {
-          // Bỏ qua lỗi autoplay bị chặn
+    // Hàm thử phát nhạc
+    const tryPlay = () => {
+      if (hasTriedAutoplay && isPlaying) return
+      
+      if (AUDIO_CONFIG.autoPlay) {
+        audio.play().catch((error) => {
+          // Autoplay bị chặn - bình thường trên mobile
+          console.log("Autoplay bị chặn, cần user interaction:", error)
         })
+      } else {
+        // Nếu không autoplay, chỉ load từ localStorage
+        const savedState = localStorage.getItem("audio-playing")
+        if (savedState === "true") {
+          audio.play().catch(() => {
+            // Bỏ qua lỗi autoplay bị chặn
+          })
+        }
       }
+      hasTriedAutoplay = true
+    }
+
+    // Thử phát ngay khi component mount
+    const timer = setTimeout(tryPlay, 500)
+
+    // Trên mobile, autoplay thường bị chặn, nên thử lại sau user interaction đầu tiên
+    const handleUserInteraction = () => {
+      if (!isPlaying && AUDIO_CONFIG.autoPlay && !hasTriedAutoplay) {
+        tryPlay()
+      }
+    }
+
+    // Lắng nghe user interaction để trigger autoplay trên mobile (chỉ một lần)
+    const options = { once: true, passive: true }
+    document.addEventListener("click", handleUserInteraction, options)
+    document.addEventListener("touchstart", handleUserInteraction, options)
+    document.addEventListener("scroll", handleUserInteraction, options)
+
+    return () => {
+      clearTimeout(timer)
+      document.removeEventListener("click", handleUserInteraction)
+      document.removeEventListener("touchstart", handleUserInteraction)
+      document.removeEventListener("scroll", handleUserInteraction)
     }
   }, [])
 

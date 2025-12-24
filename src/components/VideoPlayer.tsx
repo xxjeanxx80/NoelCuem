@@ -138,20 +138,20 @@ export default function VideoPlayer({
       {/* Modal video player */}
       {showModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-0 md:p-4"
           onClick={handleClose}
         >
           <div
-            className="relative w-full max-w-4xl mx-4 bg-black rounded-2xl overflow-hidden shadow-2xl"
+            className="relative w-full h-full md:h-auto md:max-w-4xl md:mx-4 bg-black md:rounded-2xl overflow-hidden shadow-2xl flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
             <button
               onClick={handleClose}
-              className="absolute top-4 right-4 z-10 size-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-sm"
+              className="absolute top-2 right-2 md:top-4 md:right-4 z-10 size-10 flex items-center justify-center bg-white/10 hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-sm"
               aria-label="Đóng video"
             >
-              <span className="material-symbols-outlined">close</span>
+              <span className="material-symbols-outlined text-2xl md:text-base">close</span>
             </button>
 
             {/* Video player */}
@@ -161,7 +161,8 @@ export default function VideoPlayer({
                 src={VIDEO_URL}
                 controls
                 autoPlay
-                className="w-full h-auto max-h-[80vh]"
+                playsInline
+                className="w-full h-full object-contain"
                 onEnded={() => setIsPlaying(false)}
               >
                 Trình duyệt của bạn không hỗ trợ video.
