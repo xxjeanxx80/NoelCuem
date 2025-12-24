@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react"
+import { GALLERY_IMAGE_URLS, GALLERY_VIDEO_THUMBNAILS } from "@/config"
 
 export default function GalleryPage() {
   const [filter, setFilter] = useState<"all" | "image" | "video" | "note">("all")
@@ -67,7 +68,7 @@ export default function GalleryPage() {
         <section className="w-full max-w-[1200px] px-4 pb-20">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-auto">
             <div className="group relative md:row-span-2 rounded-[2rem] overflow-hidden cursor-pointer bg-surface-dark border border-white/5 shadow-2xl transition-all duration-300 hover:shadow-primary/20" style={{ display: show("image") ? undefined : "none" }}>
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2Ar7T_OlO4Imu8gHaWk3tprBo5V4Mkfm9mjYfF2E_M_g5gQTYy7EsTwg2VBpCODGHI_ftrNwih2i1VPCfcc0xU_M0uiZMzkD-zCMHIEUtcvxdKKmteg3kHkpYtTRM-i46SFTUhMStE5s1Gamd3YZKrucJvQEctlaaejgxzNWTA1HzqyYUFhx2TsGBCl0pr6L2sxoUgl_sUSHt1jFxPEUJ6BI-DjnPaK2AOeNMEySOl8f27u9Z5bAjmS7qM5UPw6vkH1Igygs8F5rj')" }}></div>
+              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url('${GALLERY_IMAGE_URLS[0] || ""}')` }}></div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
               <div className="absolute top-4 right-4">
                 <div className="size-10 rounded-full glass-panel flex items-center justify-center text-white/80 group-hover:bg-primary group-hover:text-white transition-colors">
@@ -83,7 +84,7 @@ export default function GalleryPage() {
               </div>
             </div>
             <div className="group relative rounded-[2rem] overflow-hidden cursor-pointer bg-[#fcf8f2] text-slate-800 p-6 flex flex-col shadow-xl transform transition-all duration-300 hover:-translate-y-2 hover:rotate-1" style={{ display: show("note") ? undefined : "none" }}>
-              <div className="absolute inset-0 opacity-[0.1] pointer-events-none bg-repeat" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuARhZwu90hXedm3UwIepJ7YmoqOUytrJIbss_21fQJ87miQExzihzXG4LD6PcTpbKE4NNtEZecNRABvd_Iprzl5iEc4R6YQejtjGypiYqzlfuGsK-03-39--cbCbrXZgNqJh9U0QuYT8XsONu6gaMfINeYEYcT2A7cmRcWyD7UKIIYoBIctCpAz-CcOZPOF6JOjDGnxKiJ4EnJOcP7W5VGgF8N5O6YRliGg6DBiDS95M3ZziAxaEXHBCtNNH6WIK6yw1KIogFnyTvsr')" }}></div>
+              <div className="absolute inset-0 opacity-[0.1] pointer-events-none bg-repeat" style={{ backgroundImage: `url('${GALLERY_IMAGE_URLS[1] || GALLERY_IMAGE_URLS[0] || ""}')` }}></div>
               <div className="relative z-10 flex flex-col h-full justify-between">
                 <div>
                   <span className="material-symbols-outlined text-primary/40 text-4xl mb-2">format_quote</span>
@@ -105,7 +106,7 @@ export default function GalleryPage() {
             </div>
             <div className="group relative rounded-[2rem] overflow-hidden cursor-pointer bg-surface-dark border border-white/5 shadow-xl aspect-[4/3] md:aspect-auto" style={{ display: show("video") ? undefined : "none" }}>
               <div className="absolute inset-0 bg-gray-800">
-                <div className="absolute inset-0 bg-cover bg-center opacity-70 transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2Ar7T_OlO4Imu8gHaWk3tprBo5V4Mkfm9mjYfF2E_M_g5gQTYy7EsTwg2VBpCODGHI_ftrNwih2i1VPCfcc0xU_M0uiZMzkD-zCMHIEUtcvxdKKmteg3kHkpYtTRM-i46SFTUhMStE5s1Gamd3YZKrucJvQEctlaaejgxzNWTA1HzqyYUFhx2TsGBCl0pr6L2sxoUgl_sUSHt1jFxPEUJ6BI-DjnPaK2AOeNMEySOl8f27u9Z5bAjmS7qM5UPw6vkH1Igygs8F5rj'); backgroundPosition: 'center top'" }}></div>
+                <div className="absolute inset-0 bg-cover bg-center opacity-70 transition-transform duration-700 group-hover:scale-105" style={{ backgroundImage: `url('${GALLERY_VIDEO_THUMBNAILS[0] || ""}')`, backgroundPosition: "center top" }}></div>
               </div>
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-colors flex items-center justify-center">
                 <div className="size-16 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-white flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
@@ -118,7 +119,7 @@ export default function GalleryPage() {
               </div>
             </div>
             <div className="group relative rounded-[2rem] overflow-hidden cursor-pointer bg-surface-dark border border-white/5 shadow-xl aspect-square" style={{ display: show("image") ? undefined : "none" }}>
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuDTz5DNvzijPWK5Hpjci8iIg25CpD7C9otsCn4xrzTkhShn9qqOqKaNkbe80AAtaTt6dYOwnlASJOuJ4Aig8z8gZFz1nZukdXfYdV-9qm0i0FgEznp0L-Xj-c7_BwB8QQj6VAX0NHbbz2OsV8hxMWQn_A9wwJS4wLVttDzPjkJVIayR0Oc5CizleJfdnQSBss1eGlnH86uH8bh8BoqRma6GrHXfGX26czMltq9JkeD5KNaeD4jhnSh2TsWAoQkvolo6Om-Ovp5vEh1O')" }}></div>
+              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url('${GALLERY_IMAGE_URLS[1] || GALLERY_IMAGE_URLS[0] || ""}')` }}></div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <div className="absolute bottom-0 left-0 p-6 translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
                 <h3 className="text-white font-bold text-lg">Món quà bất ngờ</h3>
@@ -140,7 +141,7 @@ export default function GalleryPage() {
               </div>
             </div>
             <div className="group relative rounded-[2rem] overflow-hidden cursor-pointer bg-surface-dark border border-white/5 shadow-xl md:row-span-2" style={{ display: show("image") ? undefined : "none" }}>
-              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuA2Ar7T_OlO4Imu8gHaWk3tprBo5V4Mkfm9mjYfF2E_M_g5gQTYy7EsTwg2VBpCODGHI_ftrNwih2i1VPCfcc0xU_M0uiZMzkD-zCMHIEUtcvxdKKmteg3kHkpYtTRM-i46SFTUhMStE5s1Gamd3YZKrucJvQEctlaaejgxzNWTA1HzqyYUFhx2TsGBCl0pr6L2sxoUgl_sUSHt1jFxPEUJ6BI-DjnPaK2AOeNMEySOl8f27u9Z5bAjmS7qM5UPw6vkH1Igygs8F5rj'); backgroundPosition: '80% center'" }}></div>
+              <div className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110" style={{ backgroundImage: `url('${GALLERY_IMAGE_URLS[2] || GALLERY_IMAGE_URLS[0] || ""}')`, backgroundPosition: "80% center" }}></div>
               <div className="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors"></div>
               <div className="absolute top-4 left-4">
                 <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur text-white text-xs font-bold border border-white/10">
@@ -149,7 +150,7 @@ export default function GalleryPage() {
               </div>
             </div>
             <div className="group relative rounded-[2rem] overflow-hidden cursor-pointer bg-surface-dark border border-white/5 shadow-xl aspect-video md:col-span-2 lg:col-span-1" style={{ display: show("video") ? undefined : "none" }}>
-              <div className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity" style={{ backgroundImage: "url('https://lh3.googleusercontent.com/aida-public/AB6AXuARhZwu90hXedm3UwIepJ7YmoqOUytrJIbss_21fQJ87miQExzihzXG4LD6PcTpbKE4NNtEZecNRABvd_Iprzl5iEc4R6YQejtjGypiYqzlfuGsK-03-39--cbCbrXZgNqJh9U0QuYT8XsONu6gaMfINeYEYcT2A7cmRcWyD7UKIIYoBIctCpAz-CcOZPOF6JOjDGnxKiJ4EnJOcP7W5VGgF8N5O6YRliGg6DBiDS95M3ZziAxaEXHBCtNNH6WIK6yw1KIogFnyTvsr')" }}></div>
+              <div className="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-80 transition-opacity" style={{ backgroundImage: `url('${GALLERY_VIDEO_THUMBNAILS[1] || GALLERY_VIDEO_THUMBNAILS[0] || ""}')` }}></div>
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center">
                 <span className="material-symbols-outlined text-white/80 text-5xl mb-2 drop-shadow-lg group-hover:scale-110 transition-transform">slow_motion_video</span>
                 <h3 className="text-white font-bold text-xl drop-shadow-md">Video Tổng Kết Năm</h3>

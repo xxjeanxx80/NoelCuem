@@ -65,3 +65,14 @@ export const LOGIN_CONFIG = {
   storageKey: "noel-gift-authenticated", // Key để lưu trạng thái đăng nhập
 }
 
+export const GALLERY_IMAGE_URLS = [
+  "/gallery/image1.jpg",
+  "/gallery/image2.jpg",
+  "/gallery/image3.jpg"
+]
+
+export const GALLERY_VIDEO_THUMBNAILS = [
+  "/gallery/video1.jpg",
+  "/gallery/video2.jpg"
+]
+
