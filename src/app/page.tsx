@@ -2,20 +2,37 @@
 
 // Page replicates demo/code.html design with Material Symbols icons
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import AudioPlayer from "@/components/AudioPlayer"
 import GiftBox from "@/components/GiftBox"
 import DemoCountdown from "@/components/DemoCountdown"
 import VideoPlayer from "@/components/VideoPlayer"
 import Snow from "@/components/Snow"
-import { LOGIN_CONFIG } from "@/config"
+import { LOGIN_CONFIG, CHRISTMAS_DATE } from "@/config"
+
+/**
+ * Tính toán thời gian còn lại đến thời điểm đích
+ */
+function calcTimeRemaining(target: Date) {
+  const now = new Date()
+  const ms = target.getTime() - now.getTime()
+  const s = Math.max(0, Math.floor(ms / 1000))
+  const days = Math.floor(s / 86400)
+  const hours = Math.floor((s % 86400) / 3600)
+  const minutes = Math.floor((s % 3600) / 60)
+  const seconds = s % 60
+  return { days, hours, minutes, seconds, totalSeconds: s }
+}
 
 export default function Page() {
   const [isGiftOpened, setIsGiftOpened] = useState(false)
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isChecking, setIsChecking] = useState(true)
+  const [canOpenGift, setCanOpenGift] = useState(false)
   const router = useRouter()
+  
+  const targetDate = useMemo(() => new Date(CHRISTMAS_DATE), [])
 
   // Kiểm tra authentication khi component mount
   useEffect(() => {
@@ -70,6 +87,23 @@ export default function Page() {
     }
   }, [])
 
+  // Kiểm tra xem đã đến thời gian mở quà chưa (countdown = 0:0:0:0 hoặc đã qua)
+  useEffect(() => {
+    const checkCanOpenGift = () => {
+      const timeRemaining = calcTimeRemaining(targetDate)
+      // Cho phép mở quà khi countdown = 0:0:0:0 hoặc đã qua thời gian
+      setCanOpenGift(timeRemaining.totalSeconds <= 0)
+    }
+
+    // Kiểm tra ngay lập tức
+    checkCanOpenGift()
+
+    // Cập nhật mỗi giây
+    const interval = setInterval(checkCanOpenGift, 1000)
+
+    return () => clearInterval(interval)
+  }, [targetDate])
+
   // Hiển thị loading khi đang kiểm tra authentication
   if (isChecking) {
     return (
@@ -116,18 +150,27 @@ export default function Page() {
           <p className="text-white/80 text-base md:text-lg max-w-lg mx-auto mb-8 font-light">
             Giáng sinh này, anh có một món quà nhỏ muốn gửi tặng em. Hy vọng nó sẽ mang lại cho em một chút ấm áp giữa mùa đông lạnh giá.
           </p>
-          <a
-            href="#reveal"
+          <button
             onClick={(e) => {
               e.preventDefault()
-              // Trigger custom event để mở quà
-              window.dispatchEvent(new CustomEvent("open-gift-box"))
+              if (canOpenGift) {
+                // Trigger custom event để mở quà
+                window.dispatchEvent(new CustomEvent("open-gift-box"))
+              }
             }}
-            className="group relative inline-flex items-center justify-center px-8 py-3 bg-primary hover:bg-primary-dark text-white text-base font-bold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(238,43,108,0.4)] hover:shadow-[0_0_30px_rgba(238,43,108,0.6)]"
+            disabled={!canOpenGift}
+            className={`group relative inline-flex items-center justify-center px-8 py-3 text-white text-base font-bold rounded-full transition-all duration-300 ${
+              canOpenGift
+                ? "bg-primary hover:bg-primary-dark shadow-[0_0_20px_rgba(238,43,108,0.4)] hover:shadow-[0_0_30px_rgba(238,43,108,0.6)] cursor-pointer"
+                : "bg-gray-600/50 cursor-not-allowed opacity-50"
+            }`}
+            title={!canOpenGift ? "Vui lòng đợi đến Giáng Sinh để mở quà!" : "Mở quà ngay"}
           >
-            <span className="material-symbols-outlined mr-2 group-hover:animate-bounce">card_giftcard</span>
-            Mở Quà Ngay
-          </a>
+            <span className={`material-symbols-outlined mr-2 ${canOpenGift ? "group-hover:animate-bounce" : ""}`}>
+              {canOpenGift ? "card_giftcard" : "lock"}
+            </span>
+            {canOpenGift ? "Mở Quà Ngay" : "Chưa đến thời gian mở quà"}
+          </button>
         </section>
         <section className="w-full max-w-[960px] px-4 mb-16">
           <div className="glass-panel rounded-2xl p-6 md:p-8">
