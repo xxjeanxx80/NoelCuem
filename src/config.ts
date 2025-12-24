@@ -56,3 +56,12 @@ export const APP_INFO = {
   musicTitle: "Last Christmas - Wham!",
 }
 
+// Cấu hình đăng nhập
+export const LOGIN_CONFIG = {
+  // Mật khẩu để đăng nhập (ngày kỷ niệm ddmm)
+  // Ví dụ: nếu ngày kỷ niệm là 15/03 thì password là "1503"
+  password: "0909", // Thay đổi thành mật khẩu của bạn (ddmm)
+  hint: "Ngày kỷ niệm của chúng mình (ddmm)?", // Gợi ý cho user
+  storageKey: "noel-gift-authenticated", // Key để lưu trạng thái đăng nhập
+}
+

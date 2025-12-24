@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Trang Đăng Nhập - Giáng Sinh 2025</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&amp;family=Noto+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ee2b6c",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#221016",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        /* Custom Snow Animation */
+        @keyframes snowfall {
+            0% { transform: translateY(-10vh) translateX(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(110vh) translateX(20px); opacity: 0; }
+        }
+        .snowflake {
+            position: absolute;
+            color: #fff;
+            font-size: 1rem;
+            animation: snowfall linear infinite;
+            top: -10vh;
+            z-index: 0;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        /* Glassmorphism utility */
+        .glass-card {
+            background: rgba(30, 20, 24, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased overflow-hidden selection:bg-primary selection:text-white">
+<!-- Background Image with Overlay -->
+<div class="fixed inset-0 z-0">
+<img alt="Cozy Christmas lights background with dark bokeh" class="h-full w-full object-cover opacity-40 dark:opacity-30" data-alt="Cozy Christmas lights background with dark bokeh" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6lojCSujjvMhHf4iJ8I7RcuI0t0aDGz4IhP9dF8KV_VEwA0Lw-F-2_0Sm_QZ6nCVk2TScMplx9Bkl6Dv3cRH7JMnBsJjhQ9NO6hD-5M_GKXsYinNHeI43KEJpmqx3zio_-k18E2-An_fhrBnPtvfvmamtU19xGd1Cdh1gQIevDNLHIaafs4UVzScv6Crw_-QBKcdobbQpj-lbOcL8Ween1VWMhJ8YofAQQryacyb6Sjn7x_wYY8MZ2EwT8x4UQssZMtoAzsSycexr"/>
+<div class="absolute inset-0 bg-gradient-to-b from-background-dark/80 via-background-dark/50 to-background-dark/90"></div>
+</div>
+<!-- Snowflakes (Decorative) -->
+<div aria-hidden="true">
+<div class="snowflake" style="left: 10%; animation-duration: 10s; animation-delay: 0s;">❄</div>
+<div class="snowflake" style="left: 20%; animation-duration: 12s; animation-delay: 2s;">•</div>
+<div class="snowflake" style="left: 35%; animation-duration: 8s; animation-delay: 4s;">❄</div>
+<div class="snowflake" style="left: 50%; animation-duration: 15s; animation-delay: 1s;">•</div>
+<div class="snowflake" style="left: 65%; animation-duration: 11s; animation-delay: 3s;">❄</div>
+<div class="snowflake" style="left: 80%; animation-duration: 13s; animation-delay: 5s;">•</div>
+<div class="snowflake" style="left: 90%; animation-duration: 9s; animation-delay: 2s;">❄</div>
+</div>
+<!-- Main Content Wrapper -->
+<div class="relative z-10 flex min-h-screen w-full flex-col">
+<!-- Top Navigation (Music Player) -->
+<header class="w-full px-6 py-4 flex justify-end">
+<button class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 bg-white/10 hover:bg-white/20 transition-colors backdrop-blur-md text-white px-4 gap-2 text-sm font-bold shadow-lg border border-white/5">
+<span class="material-symbols-outlined text-primary text-[20px]">music_note</span>
+<span class="hidden sm:inline">Last Christmas - Wham!</span>
+</button>
+</header>
+<!-- Centered Login Card -->
+<div class="flex flex-1 flex-col justify-center items-center px-4 py-8 sm:px-6 lg:px-8">
+<div class="glass-card w-full max-w-md rounded-xl p-8 shadow-2xl flex flex-col items-center gap-6 animate-[fadeIn_1s_ease-out]">
+<!-- Icon/Avatar -->
+<div class="h-20 w-20 rounded-full bg-gradient-to-br from-primary to-rose-400 p-0.5 shadow-lg shadow-primary/30">
+<div class="h-full w-full rounded-full bg-background-dark flex items-center justify-center overflow-hidden">
+<span class="material-symbols-outlined text-primary text-[40px] fill-1">redeem</span>
+</div>
+</div>
+<!-- Headings -->
+<div class="text-center space-y-2">
+<h1 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Giáng Sinh 2025</h1>
+<p class="text-rose-200/80 text-lg font-medium">Món quà nhỏ dành tặng em ❤️</p>
+</div>
+<!-- Login Form -->
+<div class="w-full space-y-6 mt-4">
+<div class="space-y-4">
+<label class="block relative w-full group">
+<div class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-rose-200/50 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-[24px]">lock</span>
+</div>
+<input class="w-full rounded-full bg-black/20 border border-white/10 text-white placeholder-rose-200/30 focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none pl-12 pr-12 py-4 text-base transition-all shadow-inner" placeholder="Nhập mật khẩu..." type="password"/>
+<div class="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none text-rose-200/50">
+<span class="material-symbols-outlined text-[24px] fill-1">favorite</span>
+</div>
+</label>
+<div class="text-center">
+<p class="text-rose-200/60 text-sm italic flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">lightbulb</span>
+                                Gợi ý: Ngày kỷ niệm của chúng mình (ddmm)?
+                            </p>
+</div>
+</div>
+<button class="group w-full relative overflow-hidden rounded-full bg-primary hover:bg-rose-500 active:bg-rose-600 transition-all duration-300 py-4 px-6 text-white font-bold text-lg shadow-lg shadow-primary/40 hover:shadow-primary/60 transform hover:-translate-y-0.5">
+<span class="relative z-10 flex items-center justify-center gap-2">
+                            Mở Quà
+                            <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</span>
+<!-- Button Glow Effect -->
+<div class="absolute inset-0 -translate-x-full group-hover:animate-[shimmer_1.5s_infinite] bg-gradient-to-r from-transparent via-white/20 to-transparent z-0"></div>
+</button>
+</div>
+</div>
+<!-- Footer Text -->
+<div class="mt-8 text-center">
+<p class="text-white/40 text-xs">Made with love for you</p>
+</div>
+</div>
+</div>
+</body></html>

@@ -33,6 +33,12 @@ export default function VideoPlayer({
   }
 
   const handleClose = () => {
+    // Khôi phục body scroll trước
+    document.body.style.overflow = ""
+    document.body.style.position = ""
+    document.body.style.width = ""
+    document.body.style.height = ""
+    
     // Thoát fullscreen trước nếu đang ở chế độ fullscreen (hỗ trợ các prefix)
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {})
@@ -80,6 +86,14 @@ export default function VideoPlayer({
       const video = videoRef.current
       const isMobile = window.innerWidth < 768
       
+      // Ẩn body scroll và lock viewport trên mobile
+      if (isMobile) {
+        document.body.style.overflow = "hidden"
+        document.body.style.position = "fixed"
+        document.body.style.width = "100%"
+        document.body.style.height = "100%"
+      }
+      
       // Phát video
       video.play().catch((error) => {
         console.error("Lỗi khi phát video:", error)
@@ -111,7 +125,7 @@ export default function VideoPlayer({
                 console.log("MS fullscreen không khả dụng:", err)
               })
             }
-          }, 300)
+          }, 500)
         }
       }
       
@@ -132,6 +146,14 @@ export default function VideoPlayer({
       document.addEventListener("MSFullscreenChange", handleFullscreenChange)
       
       return () => {
+        // Khôi phục body scroll
+        if (isMobile) {
+          document.body.style.overflow = ""
+          document.body.style.position = ""
+          document.body.style.width = ""
+          document.body.style.height = ""
+        }
+        
         video.removeEventListener("play", handleVideoPlay)
         document.removeEventListener("fullscreenchange", handleFullscreenChange)
         document.removeEventListener("webkitfullscreenchange", handleFullscreenChange)
@@ -196,20 +218,42 @@ export default function VideoPlayer({
       {/* Modal video player */}
       {showModal && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-0 md:p-4"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black p-0 md:p-4"
+          style={{
+            // Đảm bảo fullscreen trên mobile
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: "100vw",
+            height: "100vh",
+            height: "100dvh", // Dynamic viewport height cho mobile
+          }}
           onClick={handleClose}
         >
           <div
-            className="relative w-full h-full md:h-auto md:max-w-4xl md:mx-4 bg-black md:rounded-2xl overflow-hidden shadow-2xl flex flex-col"
+            className="relative w-full h-full bg-black overflow-hidden flex flex-col"
+            style={{
+              width: "100%",
+              height: "100%",
+              minHeight: "100vh",
+              minHeight: "100dvh",
+            }}
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Close button - lớn hơn và dễ bấm trên mobile */}
+            {/* Close button - luôn hiển thị và dễ bấm trên mobile */}
             <button
               onClick={handleClose}
-              className="absolute top-3 right-3 md:top-4 md:right-4 z-20 size-12 md:size-10 flex items-center justify-center bg-black/60 hover:bg-black/80 md:bg-white/10 md:hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-sm shadow-lg"
+              className="absolute top-4 right-4 md:top-4 md:right-4 z-[10000] size-14 md:size-10 flex items-center justify-center bg-black/70 hover:bg-black/90 md:bg-white/10 md:hover:bg-white/20 rounded-full text-white transition-colors backdrop-blur-sm shadow-2xl border-2 border-white/20"
+              style={{
+                // Đảm bảo nút luôn hiển thị trên cùng
+                position: "absolute",
+                zIndex: 10000,
+              }}
               aria-label="Đóng video"
             >
-              <span className="material-symbols-outlined text-3xl md:text-base">close</span>
+              <span className="material-symbols-outlined text-4xl md:text-base font-bold">close</span>
             </button>
 
             {/* Video player */}
@@ -221,6 +265,11 @@ export default function VideoPlayer({
                 autoPlay
                 playsInline
                 className="w-full h-full object-contain"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "contain",
+                }}
                 onEnded={() => {
                   setIsPlaying(false)
                   // Thoát fullscreen khi video kết thúc

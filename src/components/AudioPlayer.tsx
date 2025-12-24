@@ -143,6 +143,40 @@ export default function AudioPlayer() {
     }
   }, [isPlaying])
 
+  // Lắng nghe event khi user đăng nhập để tự động bật nhạc
+  useEffect(() => {
+    const handleAutoPlayMusic = async () => {
+      const audio = audioRef.current
+      if (!audio || hasError) return
+
+      try {
+        // Thử phát nhạc ngay lập tức
+        await audio.play()
+        localStorage.setItem("audio-playing", "true")
+        localStorage.setItem("audio-should-play", "true")
+      } catch (error) {
+        // Nếu bị chặn, lưu flag để thử lại sau user interaction
+        console.log("Autoplay bị chặn, sẽ thử lại sau:", error)
+        localStorage.setItem("audio-should-play", "true")
+        
+        // Thử lại sau một chút
+        setTimeout(async () => {
+          try {
+            await audio.play()
+            localStorage.setItem("audio-playing", "true")
+          } catch (e) {
+            // Bỏ qua nếu vẫn không được
+          }
+        }, 500)
+      }
+    }
+
+    window.addEventListener("auto-play-music", handleAutoPlayMusic)
+    return () => {
+      window.removeEventListener("auto-play-music", handleAutoPlayMusic)
+    }
+  }, [hasError])
+
   // Toggle play/pause
   const togglePlay = async () => {
     const audio = audioRef.current

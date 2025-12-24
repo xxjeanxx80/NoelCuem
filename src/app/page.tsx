@@ -3,14 +3,47 @@
 // Page replicates demo/code.html design with Material Symbols icons
 
 import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import AudioPlayer from "@/components/AudioPlayer"
 import GiftBox from "@/components/GiftBox"
 import DemoCountdown from "@/components/DemoCountdown"
 import VideoPlayer from "@/components/VideoPlayer"
 import Snow from "@/components/Snow"
+import { LOGIN_CONFIG } from "@/config"
 
 export default function Page() {
   const [isGiftOpened, setIsGiftOpened] = useState(false)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [isChecking, setIsChecking] = useState(true)
+  const router = useRouter()
+
+  // Kiểm tra authentication khi component mount
+  useEffect(() => {
+    const checkAuth = () => {
+      const authStatus = localStorage.getItem(LOGIN_CONFIG.storageKey)
+      if (authStatus === "true") {
+        setIsAuthenticated(true)
+      } else {
+        // Redirect đến trang login nếu chưa đăng nhập
+        router.push("/login")
+      }
+      setIsChecking(false)
+    }
+
+    checkAuth()
+
+    // Lắng nghe event khi user đăng nhập từ trang khác
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === LOGIN_CONFIG.storageKey) {
+        if (e.newValue === "true") {
+          setIsAuthenticated(true)
+        }
+      }
+    }
+
+    window.addEventListener("storage", handleStorageChange)
+    return () => window.removeEventListener("storage", handleStorageChange)
+  }, [router])
 
   // Lắng nghe event khi quà được mở
   useEffect(() => {
@@ -23,6 +56,33 @@ export default function Page() {
       window.removeEventListener("gift-opened", handleGiftOpened)
     }
   }, [])
+
+  // Lắng nghe event khi user đăng nhập để tự động bật nhạc
+  useEffect(() => {
+    const handleUserLoggedIn = () => {
+      // Dispatch event để AudioPlayer tự động phát nhạc
+      window.dispatchEvent(new CustomEvent("auto-play-music"))
+    }
+
+    window.addEventListener("user-logged-in", handleUserLoggedIn)
+    return () => {
+      window.removeEventListener("user-logged-in", handleUserLoggedIn)
+    }
+  }, [])
+
+  // Hiển thị loading khi đang kiểm tra authentication
+  if (isChecking) {
+    return (
+      <div className="relative z-10 flex flex-col min-h-screen items-center justify-center">
+        <div className="text-white text-xl">Đang kiểm tra...</div>
+      </div>
+    )
+  }
+
+  // Không hiển thị nội dung nếu chưa đăng nhập
+  if (!isAuthenticated) {
+    return null
+  }
 
   return (
     <div className="relative z-10 flex flex-col min-h-screen">

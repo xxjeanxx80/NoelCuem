@@ -50,6 +50,35 @@ html, body {
     linear-gradient(180deg, rgba(10,16,36,1) 0%, rgba(12,20,40,1) 50%, rgba(10,16,36,1) 100%);
 }
 
+/* Glassmorphism utility cho login page */
+.glass-card {
+  background: rgba(30, 20, 24, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Shimmer animation cho button */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 ::-webkit-scrollbar {
   width: 8px;
 }
